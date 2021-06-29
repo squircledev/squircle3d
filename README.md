@@ -21,10 +21,10 @@ steal code, yoink it, whatever you call it. credit would be nice but i don't car
 - basic 3d camera system
 - support for baked 3d animations and interpolating between frames for 60fps+ animations even with few frames of animation
 - shaders which do the following:
-- - interpolate frames of animation
-- - add an outline to the model
-- - add subtle lighting
-- - adjust uvs so that you dont need to do separate texture pages for sprites
+  - interpolate frames of animation
+  - add an outline to the model
+  - add subtle shading
+  - adjust uvs so that you dont need to do separate texture pages for sprites
 
 ### here's what it does not contain at the moment, but will at some point as i need it for my current projects:
 - collision detection for capsules, spheroids, and other useful shapes
