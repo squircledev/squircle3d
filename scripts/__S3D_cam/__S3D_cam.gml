@@ -1,4 +1,4 @@
-function __S3D_cam() {}
+function __sd_cam() {}
 
 function S3DCamera(_fov, _aspect, _znear, _zfar) constructor
 {

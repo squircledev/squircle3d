@@ -1,6 +1,6 @@
-function __S3D_obj() {}
+function __sd_obj() {}
 
-function s3d_obj_to_model(_filename)
+function sd_obj_to_model(_filename)
 {
     var _files = [];
     var _model_count = 0;
@@ -43,7 +43,7 @@ function s3d_obj_to_model(_filename)
         show_error("No files found", true);
     }
     
-    s3d_trace("Number of files found: ", array_length(_files));
+    sd_trace("Number of files found: ", array_length(_files));
     
     for(var i = 0; i < array_length(_files); i++)
     {
@@ -108,7 +108,7 @@ function s3d_obj_to_model(_filename)
     
     for(var m = 0; m < array_length(_files); m++)
     {
-        s3d_trace("Model ", m);
+        sd_trace("Model ", m);
         var _vbuff = vertex_create_buffer();
         vertex_begin(_vbuff, _format);
         var _next_m = m + 1;

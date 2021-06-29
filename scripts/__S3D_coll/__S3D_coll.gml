@@ -1,4 +1,4 @@
-function __S3D_coll() {}
+function __sd_coll() {}
 
 function S3DCollMesh(_minimum, _maximum, _partition_amount) constructor
 {
@@ -22,16 +22,16 @@ function S3DCollMesh(_minimum, _maximum, _partition_amount) constructor
     
     static TriAdd = function(_tri)
     {
-        s3d_trace("Adding tri: ", _tri);
+        sd_trace("Adding tri: ", _tri);
         var _min = sd_tri_get_min(_tri);
         var _max = sd_tri_get_max(_tri);
         
-        var _x_low =  min(partition_amount - 1, floor(partition_amount * s3d_percent_in_range(_min[0], minimum[0], maximum[0])));
-        var _x_high = min(partition_amount - 1, floor(partition_amount * s3d_percent_in_range(_max[0], minimum[0], maximum[0])));
-        var _y_low =  min(partition_amount - 1, floor(partition_amount * s3d_percent_in_range(_min[1], minimum[1], maximum[1])));
-        var _y_high = min(partition_amount - 1, floor(partition_amount * s3d_percent_in_range(_max[1], minimum[1], maximum[1])));
-        var _z_low =  min(partition_amount - 1, floor(partition_amount * s3d_percent_in_range(_min[2], minimum[2], maximum[2])));
-        var _z_high = min(partition_amount - 1, floor(partition_amount * s3d_percent_in_range(_max[2], minimum[2], maximum[2])));
+        var _x_low =  min(partition_amount - 1, floor(partition_amount * sd_percent_in_range(_min[0], minimum[0], maximum[0])));
+        var _x_high = min(partition_amount - 1, floor(partition_amount * sd_percent_in_range(_max[0], minimum[0], maximum[0])));
+        var _y_low =  min(partition_amount - 1, floor(partition_amount * sd_percent_in_range(_min[1], minimum[1], maximum[1])));
+        var _y_high = min(partition_amount - 1, floor(partition_amount * sd_percent_in_range(_max[1], minimum[1], maximum[1])));
+        var _z_low =  min(partition_amount - 1, floor(partition_amount * sd_percent_in_range(_min[2], minimum[2], maximum[2])));
+        var _z_high = min(partition_amount - 1, floor(partition_amount * sd_percent_in_range(_max[2], minimum[2], maximum[2])));
         
         var _x_min = min(_x_low, _x_high);
         var _x_max = max(_x_low, _x_high);
@@ -58,15 +58,15 @@ function S3DCollMesh(_minimum, _maximum, _partition_amount) constructor
         {
             return [false];
         }
-        s3d_trace("Collision check start");
-        s3d_trace(_r0);
-        s3d_trace(_r1);
-        var _x1 = min(partition_amount - 1, floor(partition_amount * s3d_percent_in_range(_r0[0], minimum[0], maximum[0])));
-        var _y1 = min(partition_amount - 1, floor(partition_amount * s3d_percent_in_range(_r0[1], minimum[1], maximum[1])));
-        var _z1 = min(partition_amount - 1, floor(partition_amount * s3d_percent_in_range(_r0[2], minimum[2], maximum[2])));
-        var _x2 = min(partition_amount - 1, floor(partition_amount * s3d_percent_in_range(_r1[0], minimum[0], maximum[0])));
-        var _y2 = min(partition_amount - 1, floor(partition_amount * s3d_percent_in_range(_r1[1], minimum[1], maximum[1])));
-        var _z2 = min(partition_amount - 1, floor(partition_amount * s3d_percent_in_range(_r1[2], minimum[2], maximum[2])));
+        sd_trace("Collision check start");
+        sd_trace(_r0);
+        sd_trace(_r1);
+        var _x1 = min(partition_amount - 1, floor(partition_amount * sd_percent_in_range(_r0[0], minimum[0], maximum[0])));
+        var _y1 = min(partition_amount - 1, floor(partition_amount * sd_percent_in_range(_r0[1], minimum[1], maximum[1])));
+        var _z1 = min(partition_amount - 1, floor(partition_amount * sd_percent_in_range(_r0[2], minimum[2], maximum[2])));
+        var _x2 = min(partition_amount - 1, floor(partition_amount * sd_percent_in_range(_r1[0], minimum[0], maximum[0])));
+        var _y2 = min(partition_amount - 1, floor(partition_amount * sd_percent_in_range(_r1[1], minimum[1], maximum[1])));
+        var _z2 = min(partition_amount - 1, floor(partition_amount * sd_percent_in_range(_r1[2], minimum[2], maximum[2])));
         
         var _x_min = min(_x1, _x2);
         var _x_max = max(_x1, _x2);
@@ -75,12 +75,12 @@ function S3DCollMesh(_minimum, _maximum, _partition_amount) constructor
         var _z_min = min(_z1, _z2);
         var _z_max = max(_z1, _z2);
         
-        s3d_trace(_x_min);
-        s3d_trace(_x_max);
-        s3d_trace(_y_min);
-        s3d_trace(_y_max);
-        s3d_trace(_z_min);
-        s3d_trace(_z_max);
+        sd_trace(_x_min);
+        sd_trace(_x_max);
+        sd_trace(_y_min);
+        sd_trace(_y_max);
+        sd_trace(_z_min);
+        sd_trace(_z_max);
 
         for(var i = 0; i < partition_amount; i++)
         for(var j = 0; j < partition_amount; j++)
@@ -89,15 +89,15 @@ function S3DCollMesh(_minimum, _maximum, _partition_amount) constructor
             {
                 if(in_range(i, _x_min, _x_max) and in_range(j, _y_min, _y_max) and in_range(k, _z_min, _z_max))
                 {
-                    s3d_trace("was in range");
-                    s3d_trace(i, ", ", j, ", ", k);
+                    sd_trace("was in range");
+                    sd_trace(i, ", ", j, ", ", k);
                     for(var l = 0; l < array_length(tris[i][j][k]); l++)
                     {
                         var _tri = tris[i][j][k][l];
                         var _coll = sd_seg_in_tri(_r0, _r1, _tri);
                         if(_coll[0] == true)
                         {
-                            s3d_trace("Collision found!!!");
+                            sd_trace("Collision found!!!");
                             return _coll;
                         }
                     }
@@ -111,13 +111,13 @@ function S3DCollMesh(_minimum, _maximum, _partition_amount) constructor
     {
         var _sc = sd_sphere_get_center(_sphere);
         var _sr = sd_sphere_get_radius(_sphere);
-        s3d_trace("Collision check sphere -> collmesh start");
-        var _x1 = floor(partition_amount * s3d_percent_in_range(_sc[0] - _sr, minimum[0], maximum[0]));
-        var _y1 = floor(partition_amount * s3d_percent_in_range(_sc[1] - _sr, minimum[1], maximum[1]));
-        var _z1 = floor(partition_amount * s3d_percent_in_range(_sc[2] - _sr, minimum[2], maximum[2]));
-        var _x2 = floor(partition_amount * s3d_percent_in_range(_sc[0] + _sr, minimum[0], maximum[0]));
-        var _y2 = floor(partition_amount * s3d_percent_in_range(_sc[1] + _sr, minimum[1], maximum[1]));
-        var _z2 = floor(partition_amount * s3d_percent_in_range(_sc[2] + _sr, minimum[2], maximum[2]));
+        sd_trace("Collision check sphere -> collmesh start");
+        var _x1 = floor(partition_amount * sd_percent_in_range(_sc[0] - _sr, minimum[0], maximum[0]));
+        var _y1 = floor(partition_amount * sd_percent_in_range(_sc[1] - _sr, minimum[1], maximum[1]));
+        var _z1 = floor(partition_amount * sd_percent_in_range(_sc[2] - _sr, minimum[2], maximum[2]));
+        var _x2 = floor(partition_amount * sd_percent_in_range(_sc[0] + _sr, minimum[0], maximum[0]));
+        var _y2 = floor(partition_amount * sd_percent_in_range(_sc[1] + _sr, minimum[1], maximum[1]));
+        var _z2 = floor(partition_amount * sd_percent_in_range(_sc[2] + _sr, minimum[2], maximum[2]));
         
         var _x_min = min(_x1, _x2);
         var _x_max = max(_x1, _x2);
@@ -128,12 +128,12 @@ function S3DCollMesh(_minimum, _maximum, _partition_amount) constructor
         
         if(_x_min > partition_amount - 1 or _x_max < 0 or _y_min > partition_amount - 1 or _y_max < 0 or _z_min > partition_amount - 1 or _z_max < 0)
         {
-            s3d_trace("Bailing, out of the range");
+            sd_trace("Bailing, out of the range");
             return sd_collision_return(false);
         }
         
-        s3d_trace("Minimum: ", _x_min, ", ", _y_min, ", ", _z_min);
-        s3d_trace("Maximum: ", _x_max, ", ", _y_max, ", ", _z_max);
+        sd_trace("Minimum: ", _x_min, ", ", _y_min, ", ", _z_min);
+        sd_trace("Maximum: ", _x_max, ", ", _y_max, ", ", _z_max);
         
         var _tri_count = 0;
         
@@ -169,12 +169,12 @@ function S3DCollMesh(_minimum, _maximum, _partition_amount) constructor
             }
         }
         
-        s3d_trace("Tri count: ", _tri_count);
+        sd_trace("Tri count: ", _tri_count);
         return sd_collision_return(false);
     }
 }
 
-function s3d_obj_to_collmesh(_filename, _partition_size)
+function sd_obj_to_collmesh(_filename, _partition_size)
 {
     var _files = [];
     var _model_count = 0;
@@ -205,7 +205,7 @@ function s3d_obj_to_collmesh(_filename, _partition_size)
         show_error("No files found", true);
     }
     
-    s3d_trace("Number of files found: ", array_length(_files));
+    sd_trace("Number of files found: ", array_length(_files));
     
     for(var i = 0; i < array_length(_files); i++)
     {
@@ -260,7 +260,7 @@ function s3d_obj_to_collmesh(_filename, _partition_size)
     
     for(var m = 0; m < array_length(_files); m++)
     {
-        s3d_trace("Model ", m);
+        sd_trace("Model ", m);
         
         for(var i = 0; i < array_length(_face_array[m]); i++)
         {
@@ -301,8 +301,8 @@ function s3d_obj_to_collmesh(_filename, _partition_size)
             
             if(abs(_nx) > 1 or abs(_ny) > 1 or abs(_nz) > 1)
             {
-                s3d_trace("Tri: ", [_tri[0], _tri[1], _tri[2]]);
-                s3d_trace("Bad normals: ", [_nx, _ny, _nz]);
+                sd_trace("Tri: ", [_tri[0], _tri[1], _tri[2]]);
+                sd_trace("Bad normals: ", [_nx, _ny, _nz]);
                 show_error("Your math fucked up bitch", true);
             }
             

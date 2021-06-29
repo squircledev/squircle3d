@@ -1,4 +1,4 @@
-frame = s3d_wrap(frame + 0.25, 0, array_length(vbuff) - 1);
+frame = sd_wrap(frame + 0.25, 0, array_length(vbuff) - 1);
 rotation += 0.3;
 
 player.xspd = (keyboard_check(vk_right) - keyboard_check(vk_left)) * 0.05;
@@ -40,7 +40,7 @@ if(_coll[0] == true)
         var _new_y = player.y;
         var _new_z = player.z;
     }
-    s3d_trace("Normal: ", _normal);
+    sd_trace("Normal: ", _normal);
 }
 
 player.x = _new_x;

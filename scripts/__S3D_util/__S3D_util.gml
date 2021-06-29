@@ -23,7 +23,7 @@ function string_split(_string, _delimiter)
     return arr;
 }
 
-function s3d_trace()
+function sd_trace()
 {
     var _r/*:string*/ = "";
     for(var i = 0; i < argument_count; i++)
@@ -33,7 +33,7 @@ function s3d_trace()
     show_debug_message(_r);
 }
 
-function s3d_wrap(_val, _min, _max)
+function sd_wrap(_val, _min, _max)
 {
     if (_val mod 1 == 0)
     {
@@ -61,12 +61,12 @@ function s3d_wrap(_val, _min, _max)
     }
 }
 
-function s3d_percent_in_range(_value/*:number*/, _min/*:number*/, _max/*:number*/)
+function sd_percent_in_range(_value/*:number*/, _min/*:number*/, _max/*:number*/)
 {
     return (_value - _min) / (_max - _min);
 }
 
-function s3d_value_from_percent_in_range(_percent/*:number*/, _min/*:number*/, _max/*:number*/)
+function sd_value_from_percent_in_range(_percent/*:number*/, _min/*:number*/, _max/*:number*/)
 {
     return _min + _percent * (_max - _min);
 }

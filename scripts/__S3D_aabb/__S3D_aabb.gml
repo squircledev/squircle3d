@@ -1,4 +1,4 @@
-function __S3D_aabb() {}
+function __sd_aabb() {}
 
 function sd_aabb(_center_point, _radius_vec3)
 {
