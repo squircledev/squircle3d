@@ -62,7 +62,7 @@ function sd_closest_point_line(_line, _p)
     // float3 ClosestPointOnLineSegment(float3 A, float3 B, float3 Point)
     var _ab = sd_vec3_subtract(_line[1], _line[0]);
     var _t = sd_vec3_dot(sd_vec3_subtract(_p, _line[0]), _ab) / sd_vec3_dot(_ab, _ab);
-    return sd_vec3_add(_l0, sd_vec3_scale(_ab, min(max(_t, 0), 1))); // saturate(t) can be written as: min((max(t, 0), 1)
+    return sd_vec3_add(_line[0], sd_vec3_scale(_ab, min(max(_t, 0), 1))); // saturate(t) can be written as: min((max(t, 0), 1)
 }
 
 function sd_closest_point_tri(_point, _tri)

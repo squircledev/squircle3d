@@ -141,7 +141,7 @@ function sd_capsule_in_tri(_capsule, _tri)
     var _reference_point = sd_closest_point_tri(_line_plane_intersection, _tri);
      
     // The center of the best sphere candidate:
-    var center = sd_closest_point_line(_a, _b, _reference_point);
+    var center = sd_closest_point_line(sd_line(_a, _b), _reference_point);
     
     // Determine whether line_plane_intersection is inside all triangle edges: 
     var _c0 = vec3_cross(vec3_subtract(_line_plane_intersection, _p0), vec3_subtract(_p1, _p0)); 
@@ -156,14 +156,14 @@ function sd_capsule_in_tri(_capsule, _tri)
     else
     {
         // Edge 1:
-        var _point1 = sd_closest_point_line(_p0, _p1, _line_plane_intersection);
+        var _point1 = sd_closest_point_line(sd_line(_p0, _p1), _line_plane_intersection);
         var _v1 = vec3_subtract(_line_plane_intersection, _point1);
         var _distsq = vec3_dot(_v1, _v1);
         var _best_dist = _distsq;
         _reference_point = _point1;
         
         // Edge 2:
-        var _point2 = sd_closest_point_line(_p1, _p2, _line_plane_intersection);
+        var _point2 = sd_closest_point_line(sd_line(_p1, _p2), _line_plane_intersection);
         var _v2 = vec3_subtract(_line_plane_intersection, _point2);
         _distsq = vec3_dot(_v2, _v2);
         if(_distsq < _best_dist)
@@ -173,7 +173,7 @@ function sd_capsule_in_tri(_capsule, _tri)
         }
         
         // Edge 3:
-        var _point3 = sd_closest_point_line(_p2, _p0, _line_plane_intersection);
+        var _point3 = sd_closest_point_line(sd_line(_p2, _p0), _line_plane_intersection);
         var _v3 = vec3_subtract(_line_plane_intersection, _point3);
         _distsq = vec3_dot(_v3, _v3);
         if(_distsq < _best_dist)
@@ -182,6 +182,6 @@ function sd_capsule_in_tri(_capsule, _tri)
           _best_dist = _distsq;
         }
     }
-    var _closest_point_line = sd_closest_point_line(_a, _b, _reference_point);
+    var _closest_point_line = sd_closest_point_line(sd_line(_a, _b), _reference_point);
     return sd_sphere_in_tri(sd_sphere(_closest_point_line, _radius), _tri);
 }
