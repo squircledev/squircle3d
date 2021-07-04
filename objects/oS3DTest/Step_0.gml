@@ -10,8 +10,17 @@ var _new_y = player.y + player.yspd;
 var _new_z = player.z + player.zspd;
 var _move_normal = vec3_normal([player.x, player.y, player.z], [_new_x, _new_y, _new_z]);
 
-var _coll = floor_collmesh.CheckSphereColl(sd_sphere([_new_x, _new_y, _new_z - 0.95], 1));
+var _coll = floor_collmesh.CheckCapsuleColl(sd_capsule([_new_x, _new_y, _new_z - 0.95], [_new_x, _new_y, _new_z], 0.5));
+// var _coll = floor_collmesh.CheckSphereColl(sd_sphere([_new_x, _new_y, _new_z], 1));
 
+while(_coll[0] == true)
+{
+    player.zspd = 0;
+    _new_z -= 0.01;
+    _coll = floor_collmesh.CheckCapsuleColl(sd_capsule([_new_x, _new_y, _new_z - 0.95], [_new_x, _new_y, _new_z], 0.5));
+}
+
+/*
 if(_coll[0] == true)
 {
     player.zspd = 0;
@@ -26,11 +35,11 @@ if(_coll[0] == true)
         // it's a floor
         var _closest_point = _coll[2];
         var _pen_depth = _coll[3];
-        _coll = floor_collmesh.CheckSphereColl(sd_sphere([_new_x, _new_y, _new_z - 0.95], 1));
+        _coll = floor_collmesh.CheckCapsuleColl(sd_capsule([_new_x, _new_y, _new_z - 0.95], [_new_x, _new_y, _new_z], 1));
         while(_coll[0] == true)
         {
             _new_z -= 0.01;
-            _coll = floor_collmesh.CheckSphereColl(sd_sphere([_new_x, _new_y, _new_z - 0.95], 1));
+            _coll = floor_collmesh.CheckCapsuleColl(sd_capsule([_new_x, _new_y, _new_z - 0.95], [_new_x, _new_y, _new_z], 1));
         }
     }
     else
@@ -42,7 +51,10 @@ if(_coll[0] == true)
     }
     sd_trace("Normal: ", _normal);
 }
+*/
 
 player.x = _new_x;
 player.y = _new_y;
 player.z = _new_z;
+
+cam.SetViewMat(0);

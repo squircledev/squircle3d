@@ -15,17 +15,20 @@ function sd_point(_x, _y, _z)
 
 function sd_line(_p0, _p1)
 {
-    return [_p0, _p1];
+    var _normal = vec3_normal(_p0, _p1);
+    return [_p0, _p1, _normal];
 }
 
 function sd_ray(_p0, _p1)
 {
-    return [_p0, _p1];
+    var _normal = vec3_normal(_p0, _p1);
+    return [_p0, _p1, _normal];
 }
 
 function sd_segment(_p0, _p1)
 {
-    return [_p0, _p1];
+    var _normal = vec3_normal(_p0, _p1);
+    return [_p0, _p1, _normal];
 }
 
 #endregion
@@ -38,7 +41,7 @@ enum SD_PLANE
     DISTANCE
 }
 
-function sd_plane(_normal, _point_on_plane) constructor
+function sd_plane(_normal, _point_on_plane)
 {
     return [_normal, vec3_dot(_normal, _point_on_plane)];
 }
@@ -46,7 +49,7 @@ function sd_plane(_normal, _point_on_plane) constructor
 function sd_plane_from_tri(_tri)
 {
     var _normal = sd_tri_get_normal(_tri);
-    return new sd_plane(_normal, sd_tri_get_point(_tri, 0));
+    return sd_plane(_normal, sd_tri_get_point(_tri, 0));
 }
 
 function sd_plane_get_normal(_plane)
@@ -77,7 +80,7 @@ function sd_tri(_p0, _p1, _p2, _normal)
     var _tri = [_p0, _p1, _p2, _normal, undefined];
     var _min = sd_tri_get_min(_tri);
     var _max = sd_tri_get_max(_tri);
-    _tri[4] = sd_aabb_from_minmax(_min, _max);
+    _tri[SD_TRI.AABB] = sd_aabb_from_minmax(_min, _max);
     return _tri;
 }
 
@@ -148,14 +151,68 @@ function sd_sphere_get_aabb(_sphere)
 
 #region capsules
 
-function sd_capsule(_point_a, _point_b, _radius)
+enum SD_CAPSULE
 {
-    return [_point_a, _point_b, _radius];
+    Tip,
+    Base,
+    PointA,
+    PointB,
+    Normal,
+    Radius,
+    AABB
 }
 
-function sd_capsule_get_point(_capsule, _index)
+function sd_capsule(_tip, _base, _radius)
 {
-    return _capsule[_index];   
+    var _cn = vec3_normal(_base, _tip);
+    var _line_end_offset = vec3_scale(_cn, _radius);
+    var _a = vec3_add(_base, _line_end_offset); 
+    var _b = vec3_subtract(_tip, _line_end_offset);
+    var _min = [0, 0, 0];
+    var _max = [0, 0, 0];
+    _min[0] = min(_a[0] - _radius, _b[0] - _radius);
+    _min[1] = min(_a[1] - _radius, _b[1] - _radius);
+    _min[2] = min(_a[2] - _radius, _b[2] - _radius);
+    _max[0] = max(_a[0] + _radius, _b[0] + _radius);
+    _max[1] = max(_a[1] + _radius, _b[1] + _radius);
+    _max[2] = max(_a[2] + _radius, _b[2] + _radius);
+    var _aabb = sd_aabb_from_minmax(_min, _max);
+    return [_tip, _base, _a, _b, _cn, _radius, _aabb];
+}
+
+function sd_capsule_get_tip(_capsule)
+{
+    return _capsule[SD_CAPSULE.Tip];
+}
+
+function sd_capsule_get_base(_capsule)
+{
+    return _capsule[SD_CAPSULE.Base];
+}
+
+function sd_capsule_get_point_a(_capsule)
+{
+    return _capsule[SD_CAPSULE.PointA];
+}
+
+function sd_capsule_get_point_b(_capsule)
+{
+    return _capsule[SD_CAPSULE.PointB];
+}
+
+function sd_capsule_get_normal(_capsule)
+{
+    return _capsule[SD_CAPSULE.Normal];
+}
+
+function sd_capsule_get_radius(_capsule)
+{
+    return _capsule[SD_CAPSULE.Radius];
+}
+
+function sd_capsule_get_aabb(_capsule)
+{
+    return _capsule[SD_CAPSULE.AABB];
 }
 
 #endregion

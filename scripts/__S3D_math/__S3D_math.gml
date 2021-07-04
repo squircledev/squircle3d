@@ -57,11 +57,11 @@ function sd_point_in_tri_3d(_point, _tri)
     return (_v >= 0) && (_w >= 0) && ((_v + _w) <= 1.0);
 }
 
-function sd_closest_point_line(_l0, _l1, _p)
+function sd_closest_point_line(_line, _p)
 {
     // float3 ClosestPointOnLineSegment(float3 A, float3 B, float3 Point)
-    var _ab = sd_vec3_subtract(_l1, _l0);
-    var _t = sd_vec3_dot(sd_vec3_subtract(_p, _l0), _ab) / sd_vec3_dot(_ab, _ab);
+    var _ab = sd_vec3_subtract(_line[1], _line[0]);
+    var _t = sd_vec3_dot(sd_vec3_subtract(_p, _line[0]), _ab) / sd_vec3_dot(_ab, _ab);
     return sd_vec3_add(_l0, sd_vec3_scale(_ab, min(max(_t, 0), 1))); // saturate(t) can be written as: min((max(t, 0), 1)
 }
 
@@ -153,97 +153,9 @@ function sd_sphere_coll_tri(_sphere, _tri)
     }
 }
 
-function sd_sphere_coll_tri_alt(_sc, _sr, _tri)
+/*
+function sd_sphere_coll_tri_alt(_sphere, _tri)
 {
-    /*
-    float3 p0, p1, p2; // triangle corners
-    float3 center; // sphere center
-    float3 N = normalize(cross(p1 – p0, p2 – p0)); // plane normal
-    float dist = dot(center – p0, N); // signed distance between sphere and plane
-    if(!mesh.is_double_sided() && dist > 0)
-      continue; // can pass through back side of triangle (optional)
-    if(dist < -radius || dist > radius)
-      continue; // no intersection
-      
-    float3 point0 = center – N * dist; // projected sphere center on triangle plane
- 
-    // Now determine whether point0 is inside all triangle edges: 
-    float3 c0 = cross(point0 – p0, p1 – p0) 
-    float3 c1 = cross(point0 – p1, p2 – p1) 
-    float3 c2 = cross(point0 – p2, p0 – p2)
-    bool inside = dot(c0, N) <= 0 && dot(c1, N) <= 0 && dot(c2, N) <= 0;
-
-    float3 ClosestPointOnLineSegment(float3 A, float3 B, float3 Point)
-    {
-      float3 AB = B – A;
-      float t = dot(Point – A, AB) / dot(AB, AB);
-      return A + saturate(t) * AB; // saturate(t) can be written as: min((max(t, 0), 1)
-    }
-     
-    float radiussq = radius * radius; // sphere radius squared
-     
-    // Edge 1:
-    float3 point1 = ClosestPointOnLineSegment(p0, p1, center);
-    float3 v1 = center – point1;
-    float distsq1 = dot(v1, v1);
-    bool intersects = distsq1 < radiussq;
-     
-    // Edge 2:
-    float3 point2 = ClosestPointOnLineSegment(p1, p2, center);
-    float3 v2 = center – point2;
-    float distsq2 = dot(vec2, vec2);
-    intersects |= distsq2 < radiussq;
-     
-    // Edge 3:
-    float3 point3 = ClosestPointOnLineSegment(p2, p0, center);
-    float3 v3 = center – point3;
-    float distsq3 = dot(v3, v3);
-    intersects |= distsq3 < radiussq;
-    
-    
-    if(inside || intersects)
-    {
-      float3 best_point = point0;
-      float3 intersection_vec;
-     
-      if(inside)
-      {
-        intersection_vec = center – point0;
-      }
-      else  
-      {
-        float3 d = center – point1;
-        float best_distsq = dot(d, d);
-        best_point = point1;
-        intersection_vec = d;
-     
-        d = center – point2;
-        float distsq = dot(d, d);
-        if(distsq < best_distsq)
-        {
-          distsq = best_distsq;
-          best_point = point2;
-          intersection_vec = d;
-        }
-     
-        d = center – point3;
-        float distsq = dot(d, d);
-        if(distsq < best_distsq)
-        {
-          distsq = best_distsq;
-          best_point = point3; 
-          intersection_vec = d;
-        }
-      }
-     
-      float3 len = length(intersection_vec);  // vector3 length calculation: 
-      sqrt(dot(v, v))
-      float3 penetration_normal = penetration_vec / len;  // normalize
-      float penetration_depth = radius – len; // radius = sphere radius
-      return true; // intersection success
-    }
-    */
-    
     var _p0 = sd_tri_get_point(_tri, 0);
     var _p1 = sd_tri_get_point(_tri, 1);
     var _p2 = sd_tri_get_point(_tri, 2);
@@ -334,7 +246,9 @@ function sd_sphere_coll_tri_alt(_sc, _sr, _tri)
         return sd_collision_return(false);
     }
 }
+*/
 
+/*
 function sd_sphere_coll_sphere(_sc0, _sr0, _sc1, _sr1)
 {
     var _distance = sd_vec3_distance(_sc0, _sc1);
@@ -351,6 +265,7 @@ function sd_sphere_coll_sphere(_sc0, _sr0, _sc1, _sr1)
         return sd_collision_return(true, [_sc1, _sr1], undefined, _penetration_depth, _penetration_normal);
     }
 }
+*/
 
 #endregion
 
@@ -362,8 +277,6 @@ function in_range(_value, _min, _max, _inclusive = true)
     }
     return (_value > _min) && (_value < _max);
 }
-
-function scrMath() {}
 
 function wrap_value(_val, _min, _max)
 {

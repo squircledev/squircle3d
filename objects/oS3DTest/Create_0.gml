@@ -1,5 +1,5 @@
 sd_init();
-vbuff = sd_obj_to_model("werewollf.obj");
+vbuff = sd_obj_to_model("dog.obj");
 floor_model = sd_obj_to_model("floor.obj");
 floor_collmesh = sd_obj_to_collmesh("floor.obj", 8);
 cam = new S3DCamera(40, 16/9, 1, 32000);

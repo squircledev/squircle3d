@@ -7,6 +7,7 @@ function sd_init()
 {
     gpu_set_cullmode(cull_clockwise);
     gpu_set_ztestenable(true);
+    gpu_set_zwriteenable(true);
 }
 
 function sd_matrix_identity()

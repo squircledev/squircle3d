@@ -172,6 +172,81 @@ function S3DCollMesh(_minimum, _maximum, _partition_amount) constructor
         sd_trace("Tri count: ", _tri_count);
         return sd_collision_return(false);
     }
+    
+    static CheckCapsuleColl = function(_capsule)
+    {
+        var _a = sd_capsule_get_point_a(_capsule);
+        var _b = sd_capsule_get_point_b(_capsule);
+        var _radius = sd_capsule_get_radius(_capsule);
+        
+        sd_trace("capsule coll");
+        sd_trace("A: ", _a);
+        sd_trace("B: ", _b);
+        
+        
+        sd_trace("Collision check capsule -> collmesh start");
+        var _x1 = floor(partition_amount * sd_percent_in_range(min(_a[0] - _radius, _b[0] - _radius), minimum[0], maximum[0]));
+        var _y1 = floor(partition_amount * sd_percent_in_range(min(_a[1] - _radius, _b[1] - _radius), minimum[1], maximum[1]));
+        var _z1 = floor(partition_amount * sd_percent_in_range(min(_a[2] - _radius, _b[2] - _radius), minimum[2], maximum[2]));
+        var _x2 = floor(partition_amount * sd_percent_in_range(max(_a[0] + _radius, _b[0] + _radius), minimum[0], maximum[0]));
+        var _y2 = floor(partition_amount * sd_percent_in_range(max(_a[1] + _radius, _b[1] + _radius), minimum[1], maximum[1]));
+        var _z2 = floor(partition_amount * sd_percent_in_range(max(_a[2] + _radius, _b[2] + _radius), minimum[2], maximum[2]));
+        
+        var _x_min = min(_x1, _x2);
+        var _x_max = max(_x1, _x2);
+        var _y_min = min(_y1, _y2);
+        var _y_max = max(_y1, _y2);
+        var _z_min = min(_z1, _z2);
+        var _z_max = max(_z1, _z2);
+        
+        if(_x_min > partition_amount - 1 or _x_max < 0 or _y_min > partition_amount - 1 or _y_max < 0 or _z_min > partition_amount - 1 or _z_max < 0)
+        {
+            sd_trace("Bailing, out of the range");
+            return sd_collision_return(false);
+        }
+        
+        sd_trace("Minimum: ", _x_min, ", ", _y_min, ", ", _z_min);
+        sd_trace("Maximum: ", _x_max, ", ", _y_max, ", ", _z_max);
+        
+        var _tri_count = 0;
+        
+        _x_min = clamp(_x_min, 0, partition_amount - 1);
+        _x_max = clamp(_x_max, 0, partition_amount - 1);
+        _y_min = clamp(_y_min, 0, partition_amount - 1);
+        _y_max = clamp(_y_max, 0, partition_amount - 1);
+        _z_min = clamp(_z_min, 0, partition_amount - 1);
+        _z_max = clamp(_z_max, 0, partition_amount - 1);
+
+        for(var i = _x_min; i <= _x_max; i++)
+        {
+            for(var j = _y_min; j <= _y_max; j++)
+            {
+                for(var k = _z_min; k <= _z_max; k++)
+                {
+                    var _tris = array_length(tris[i][j][k]);
+                    _tri_count += _tris;
+                    for(var l = 0; l < _tris; l++)
+                    {
+                        var _tri = tris[i][j][k][l];
+                        var _aabb_coll = sd_aabb_in_aabb(sd_capsule_get_aabb(_capsule), sd_tri_get_aabb(_tri));
+                        if(_aabb_coll[0] == true)
+                        {
+                            var _coll = sd_capsule_in_tri(_capsule, _tri);
+                            if(_coll[0] == true)
+                            {
+                                sd_trace("Collided with tri: ", _tri);
+                                sd_trace("Tri count: ", _tri_count);
+                                return _coll;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        sd_trace("Tri count: ", _tri_count);
+        return sd_collision_return(false);
+    }
 }
 
 function sd_obj_to_collmesh(_filename, _partition_size)
