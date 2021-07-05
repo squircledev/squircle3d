@@ -16,7 +16,7 @@ steal code, yoink it, whatever you call it. credit would be nice but i don't car
 ### here's what this 3d "library" of mine contains:
 - bugs
 - inaccurate and/or poorly performing implementations
-- collision detection for aabbs, spheres, tris, and segments/lines/rays
+- collision detection for aabbs, spheres, tris, capsules, and segments/lines/rays
 - collision mesh for somewhat performatively checking against level geometry
 - basic 3d camera system
 - support for baked 3d animations and interpolating between frames for 60fps+ animations even with few frames of animation
